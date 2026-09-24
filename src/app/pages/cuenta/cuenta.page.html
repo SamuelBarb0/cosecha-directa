@@ -1,0 +1,51 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Mi cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (auth.usuario(); as u) {
+    <ion-list lines="none">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img [src]="u.image" [alt]="u.firstName" />
+        </ion-avatar>
+        <ion-label>
+          <h2 data-test="nombre-usuario">{{ u.firstName }} {{ u.lastName }}</h2>
+          <p>{{ u.email }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  }
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Mis pedidos</ion-label>
+    </ion-list-header>
+    @for (p of pedidos.historial(); track p.numero) {
+      <ion-item data-test="pedido">
+        <ion-icon slot="start" name="receipt-outline"></ion-icon>
+        <ion-label>
+          <h2>Pedido n.º {{ p.numero }}</h2>
+          <p>{{ p.fecha | date: 'd MMM y, h:mm a' }} · {{ p.items.length }} productos</p>
+        </ion-label>
+        <div slot="end" class="derecha">
+          <strong>{{ p.total | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+          <ion-badge color="primary">{{ p.estado }}</ion-badge>
+        </div>
+      </ion-item>
+    } @empty {
+      <ion-item>
+        <ion-note>Todavía no ha hecho pedidos.</ion-note>
+      </ion-item>
+    }
+  </ion-list>
+
+  <div class="ion-padding">
+    <ion-button data-test="salir" expand="block" fill="outline" color="danger" (click)="salir()">
+      <ion-icon slot="start" name="log-out-outline"></ion-icon>
+      Cerrar sesión
+    </ion-button>
+  </div>
+</ion-content>

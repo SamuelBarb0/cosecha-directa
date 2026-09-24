@@ -1,0 +1,7 @@
+{
+  "name": "cosecha-directa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

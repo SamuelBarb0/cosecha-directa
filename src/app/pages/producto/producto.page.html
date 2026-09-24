@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/catalogo" text="Catálogo"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ producto()?.nombre ?? 'Producto' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (producto(); as p) {
+    <img class="foto" [src]="p.imagen" [alt]="p.nombre" />
+    <div class="ion-padding">
+      <h1 data-test="nombre">{{ p.nombre }}</h1>
+      <div class="precio">
+        {{ p.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }} <span>/ {{ p.unidad }}</span>
+      </div>
+      <p>{{ p.descripcion }}</p>
+    </div>
+
+    <ion-list lines="full">
+      <ion-item>
+        <ion-label>Categoría</ion-label>
+        <ion-note slot="end">{{ p.categoria }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Municipio de origen</ion-label>
+        <ion-note slot="end">{{ p.origen }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Unidad de venta</ion-label>
+        <ion-note slot="end">{{ p.unidad }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-label>Disponibles</ion-label>
+        <ion-note slot="end">{{ p.existencias }}</ion-note>
+      </ion-item>
+    </ion-list>
+
+    @if (p.pesoVariable) {
+      <div class="peso" data-test="peso-variable">
+        <ion-icon name="scale-outline"></ion-icon>
+        Producto de peso variable: el valor es estimado y se ajusta al peso real al alistar el pedido.
+      </div>
+    }
+  } @else {
+    <ion-note class="ion-padding">Cargando producto…</ion-note>
+  }
+</ion-content>
+
+@if (producto(); as p) {
+  <ion-footer>
+    <ion-toolbar>
+      <div class="cantidad">
+        <ion-button fill="outline" [disabled]="enCarrito() === 0" (click)="cambiar(-1)" aria-label="Quitar uno">
+          <ion-icon slot="icon-only" name="remove-outline"></ion-icon>
+        </ion-button>
+        <strong data-test="cantidad">{{ enCarrito() }}</strong>
+        <ion-button
+          data-test="sumar"
+          [disabled]="enCarrito() >= p.existencias"
+          (click)="cambiar(1)"
+          aria-label="Agregar uno"
+        >
+          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-toolbar>
+  </ion-footer>
+}

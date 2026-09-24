@@ -1,0 +1,39 @@
+.vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20vh;
+  color: var(--ion-color-medium);
+
+  ion-icon {
+    font-size: 64px;
+  }
+}
+
+.subtotal {
+  font-weight: 700;
+  color: var(--ion-color-dark) !important;
+}
+
+.cantidad {
+  display: flex;
+  align-items: center;
+
+  span {
+    min-width: 2ch;
+    text-align: center;
+    font-weight: 700;
+  }
+}
+
+.nota {
+  display: block;
+  padding: 16px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 16px 0;
+  font-size: 1.1rem;
+}

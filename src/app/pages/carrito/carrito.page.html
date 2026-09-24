@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Carrito</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  @if (carrito.items().length === 0) {
+    <div class="vacio" data-test="carrito-vacio">
+      <ion-icon name="cart-outline"></ion-icon>
+      <p>Su carrito está vacío.</p>
+      <ion-button fill="outline" routerLink="/tabs/catalogo">Ir al catálogo</ion-button>
+    </div>
+  } @else {
+    <ion-list>
+      @for (item of carrito.items(); track item.producto.id) {
+        <ion-item-sliding>
+          <ion-item data-test="item-carrito">
+            <ion-thumbnail slot="start">
+              <img [src]="item.producto.imagen" [alt]="item.producto.nombre" />
+            </ion-thumbnail>
+            <ion-label>
+              <h2>{{ item.producto.nombre }}</h2>
+              <p>{{ item.producto.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }} / {{ item.producto.unidad }}</p>
+              <p class="subtotal">{{ item.producto.precio * item.cantidad | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</p>
+            </ion-label>
+            <div class="cantidad" slot="end">
+              <ion-button fill="clear" size="small" (click)="cambiar(item, -1)" aria-label="Quitar uno">
+                <ion-icon slot="icon-only" name="remove-outline"></ion-icon>
+              </ion-button>
+              <span data-test="cantidad-item">{{ item.cantidad }}</span>
+              <ion-button
+                fill="clear"
+                size="small"
+                [disabled]="item.cantidad >= item.producto.existencias"
+                (click)="cambiar(item, 1)"
+                aria-label="Agregar uno"
+              >
+                <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="quitar(item)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      }
+    </ion-list>
+
+    @if (carrito.tienePesoVariable()) {
+      <ion-note class="nota">
+        El total es estimado: los productos de peso variable se ajustan al peso real registrado en el alistamiento.
+      </ion-note>
+    }
+  }
+</ion-content>
+
+@if (carrito.items().length > 0) {
+  <ion-footer>
+    <ion-toolbar>
+      <div class="total">
+        <span>Total{{ carrito.tienePesoVariable() ? ' estimado' : '' }}</span>
+        <strong data-test="total">{{ carrito.total() | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}</strong>
+      </div>
+      <ion-button data-test="confirmar" expand="block" [disabled]="confirmando()" (click)="confirmar()">
+        @if (confirmando()) {
+          <ion-spinner name="crescent"></ion-spinner>
+        } @else {
+          Confirmar pedido
+        }
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>
+}

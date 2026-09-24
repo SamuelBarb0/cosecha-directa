@@ -1,0 +1,21 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="catalogo" href="/tabs/catalogo">
+      <ion-icon aria-hidden="true" name="storefront-outline"></ion-icon>
+      <ion-label>Catálogo</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="carrito" href="/tabs/carrito">
+      <ion-icon aria-hidden="true" name="cart-outline"></ion-icon>
+      <ion-label>Carrito</ion-label>
+      @if (carrito.cantidadTotal() > 0) {
+        <ion-badge color="danger">{{ carrito.cantidadTotal() }}</ion-badge>
+      }
+    </ion-tab-button>
+
+    <ion-tab-button tab="cuenta" href="/tabs/cuenta">
+      <ion-icon aria-hidden="true" name="person-circle-outline"></ion-icon>
+      <ion-label>Mi cuenta</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

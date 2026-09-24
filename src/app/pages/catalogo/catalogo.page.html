@@ -1,0 +1,76 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Catálogo</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      data-test="buscar"
+      placeholder="Buscar producto o municipio"
+      [debounce]="250"
+      (ionInput)="alBuscar($event)"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="refrescar($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  @if (catalogo.sinConexion()) {
+    <div class="aviso" data-test="sin-conexion">
+      <ion-icon name="cloud-offline-outline"></ion-icon>
+      Sin conexión: se muestra el último catálogo guardado en el teléfono.
+    </div>
+  }
+
+  <div class="categorias">
+    @for (c of catalogo.categorias(); track c) {
+      <ion-chip [outline]="categoria() !== c" color="primary" (click)="alternarCategoria(c)">
+        <ion-label>{{ c }}</ion-label>
+      </ion-chip>
+    }
+  </div>
+
+  @if (catalogo.cargando() && catalogo.productos().length === 0) {
+    <div class="centro"><ion-spinner name="crescent"></ion-spinner></div>
+  } @else if (visibles().length === 0) {
+    <ion-note class="centro">No hay productos que coincidan con la búsqueda.</ion-note>
+  }
+
+  <ion-grid>
+    <ion-row>
+      @for (p of visibles(); track p.id) {
+        <ion-col size="6" size-md="4" size-lg="3">
+          <ion-card class="producto" [routerLink]="['/producto', p.id]" data-test="producto">
+            <img [src]="p.imagen" [alt]="p.nombre" loading="lazy" />
+            <ion-card-header>
+              <ion-card-subtitle>{{ p.origen }}</ion-card-subtitle>
+              <ion-card-title>{{ p.nombre }}</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <div class="precio">
+                {{ p.precio | currency: 'COP' : 'symbol-narrow' : '1.0-0' }}
+                <span>/ {{ p.unidad }}</span>
+              </div>
+              @if (carrito.cantidadDe(p.id) > 0) {
+                <ion-badge color="success">{{ carrito.cantidadDe(p.id) }} en el carrito</ion-badge>
+              }
+              <ion-button
+                data-test="agregar"
+                size="small"
+                expand="block"
+                fill="outline"
+                [disabled]="carrito.cantidadDe(p.id) >= p.existencias"
+                (click)="agregar(p, $event)"
+              >
+                <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+                Agregar
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      }
+    </ion-row>
+  </ion-grid>
+</ion-content>
