@@ -5,8 +5,6 @@ import { AlmacenamientoService } from './almacenamiento.service';
 
 const CLAVE_CARRITO = 'carrito';
 
-// Angular 22 funciona sin zone.js: el carrito vive en una señal y cada cambio
-// reemplaza el arreglo completo (nunca se muta), para que la vista se repinte.
 @Injectable({ providedIn: 'root' })
 export class CarritoService {
   private almacenamiento = inject(AlmacenamientoService);

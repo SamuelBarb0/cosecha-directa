@@ -22,10 +22,6 @@ interface Ficha {
   pesoVariable: boolean;
 }
 
-// La API entrega un catálogo genérico en inglés y en dólares. Esta tabla lo adapta
-// al surtido de Cosecha Directa: nombre, categoría, municipio de origen y unidad de venta.
-// Los productos de la API que no están en la tabla (comida de mascotas, papel, gaseosas)
-// quedan fuera del catálogo.
 export const FICHAS: Record<number, Ficha> = {
   16: { nombre: 'Manzana roja', descripcion: 'Manzana crocante y dulce, ideal para lonchera o postres.', categoria: 'Frutas', origen: 'Nuevo Colón', unidad: 'kg', pesoVariable: true },
   17: { nombre: 'Lomo de res', descripcion: 'Corte magro de res criada en pastoreo.', categoria: 'Proteínas', origen: 'Ubaté', unidad: 'kg', pesoVariable: true },

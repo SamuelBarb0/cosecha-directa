@@ -7,8 +7,6 @@ import { AuthService } from '../services/auth.service';
 const conToken = (req: HttpRequest<unknown>, token: string) =>
   req.clone({ setHeaders: { Authorization: `Bearer ${token}` } });
 
-// Adjunta el token a las peticiones del API y, si el servidor responde 401,
-// intenta una sola renovación con el refresh token antes de rendirse.
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);
   const token = auth.sesion()?.accessToken;

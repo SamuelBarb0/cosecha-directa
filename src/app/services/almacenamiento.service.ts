@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 
-// Envoltorio de Capacitor Preferences: en Android escribe en SharedPreferences,
-// en iOS en UserDefaults y en el navegador en localStorage.
 @Injectable({ providedIn: 'root' })
 export class AlmacenamientoService {
   async guardar<T>(clave: string, valor: T): Promise<void> {
